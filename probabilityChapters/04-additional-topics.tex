@@ -1,0 +1,681 @@
+\documentclass{ximera}
+\input{../xmPreamble}
+
+\title{Chapter 4}
+\begin{document}
+\begin{abstract}
+\end{abstract}
+\maketitle
+\section{Additional Topics} 
+
+\subsection{Transformations of a random variable}
+Suppose that $X$ is a continuous random variable and $Y=g(X)$ is a function of $X$. How can we express the PDF of $Y$ in terms of the PDF of $X$? In the linear case, there is a simple statement:
+
+\begin{prop}\label{11}
+The probability distribution function of $Y=aX+b$ is
+$$
+f_Y(y) = \frac{1}{ \vert a \vert} f_X\left( \frac{y-b}{a}\right),
+$$
+as long as $a \neq 0$.
+\end{prop}
+\begin{proof}
+By the definition of the cumulative distribution function,
+\begin{align*}
+F_Y(y) &= \PP(Y \leq y) \\
+&=  \PP(aX+b \leq y).
+\end{align*}
+If $a>0$, then 
+\begin{align*}
+F_Y(y) &= \PP\left( X \leq \frac{y-b}{a} \right) \\
+&= F_X\left( \frac{y-b}{a} \right).
+\end{align*}
+Since $f_Y(y) = \dfrac{d F_Y}{dy}(y)$, we should take the derivative on both sides. Then by the chain rule,
+$$
+f_Y(y) = \frac{1}{a} f_X\left( \frac{y-b}{a} \right).
+$$
+If instead $a<0$, then
+\begin{align*}
+F_Y(y) &= \PP\left( X \geq \frac{y-b}{a} \right) \\
+&= 1- \mathbb{P}\left(X \leq \frac{y-b}{a} \right) \\
+&= 1 - F_X\left( \frac{y-b}{a}\right).
+\end{align*}
+Again, take the derivative of both sides to get that
+$$
+f_Y(y) = - \frac{1}{a} f_X\left( \frac{y-b}{a} \right).
+$$
+So the statement of the proposition is true in both cases $a>0$ and $a<0$. 
+
+
+\end{proof}
+
+\begin{example}
+Suppose that $X \sim \mathcal{N}(0,1)$. We will show that $\sigma X + \mu \sim \mathcal{N}(\mu,\sigma^2)$.
+
+Let $Y=\sigma X + \mu$. By the previous proposition,
+$$
+f_Y(y) = \frac{1}{\vert \sigma \vert} f_X\left( \frac{y-\mu}{\sigma}\right).
+$$
+We already know that
+$$
+f_X(x) = \frac{1}{ \sqrt{ 2\pi} } e^{-x^2/2}.
+$$
+Plugging this into the previous equation,
+$$
+f_Y(y) = \frac{1}{\sqrt{ 2\pi} \vert \sigma \vert} e^{-(x-\mu)/(2\sigma^2)}. 
+$$
+This is the probability distribution function of $\mathcal{N}(\mu, \vert \sigma \vert^2)$. Since $\sigma^2 = \vert \sigma \vert^2$, this is what we wanted to show. In particular, $-X \sim \mathcal{N}(0,1)$, which we could have seen from the fact that the PDF is symmetric.
+\end{example}
+
+Here is one application of the previous example. Suppose that $Y \sim \mathcal{N}(3,4)$. How do we find $\mathbb{P}(Y >1)$? We recognize that we can write $Y=2X+3$ for  $X\sim \mathcal{N}(0,1)$. Then
+$$
+\mathbb{P}(Y>1) = \mathbb{P}(2X+3>1) = \mathbb{P}(X>-1).
+$$
+This then equals 
+$$
+1 - \mathbb{P}(X \leq -1) = 1-\Phi(-1) = \Phi(1) \approx 0.84
+$$
+\subsection{Convolution}
+
+Now suppose we have \textit{two} random variables $X$ and $Y$ (discrete or continuous), and $Z$ is a function of $X$ and $Y$. Again, we'll consider the simplest case when the function is linear. How can we find the PMF or PDF of $Z$? If we assume that $X$ and $Y$ are \textit{independent}, this is done through something called the convolution.
+
+\begin{definition}
+If $g$ and $h$ are two functions defined on $\{0,1,2,\ldots\}$, their convolution $g *h$ is defined by
+$$
+[g*h](n) = \sum_{m=0}^{n} g(m)h(n-m).
+$$
+If $g$ and $h$ are two functions defined on $\mathbb{R}$, their convolution $g*h$ is defined by
+$$
+[g*h](x) = \int_{\mathbb{R}} g(y)h(x-y)dy.
+$$
+\end{definition}
+
+The convolution comes up in the following theorem.
+\begin{theorem}
+(a) Suppose that $X$ and $Y$ are discrete independent random variables. Set $Z=X+Y$. The PMF of $Z$ is
+$$
+p_Z(z) = \left[p_X * p_Y\right](z).
+$$
+(b) Suppose that $X$ and $Y$ are continuous independent random variables. Set $Z=X+Y$. The PDF of $Z$ is
+$$
+f_Z(z) = \left[f_X * f_Y\right](z).
+$$
+\end{theorem}
+\begin{proof}
+
+(a) By the definition of the PMF, 
+\begin{align*}
+p_Z(z) &= \mathbb{P}(Z = z) \\
+&= \mathbb{P}(X+Y=z).
+\end{align*}
+The event $\{ X+Y = z\}$ can be written as the union 
+$$
+\{X+Y =z \} = \bigcup_{\substack{(x,y) \\ x+y=z}} \{ X=x,Y=y\}.
+$$
+The set of pairs $(x,y)$ such that $x+y=z$ consists of $\{(0,z),(1,z-1),(2,z-2),\ldots,(z,0)\}$. In particular, it is a finite set. Moreover, the sets are disjoint, so by additivity,
+$$
+p_Z(z) = \sum_{x=0}^z \PP(X=x,Y=z-x).
+$$
+By independence, 
+\begin{align*}
+\PP(X=x,Y=z-x) &= \PP(X=x) \PP(Y=z-x)\\
+&= p_X(x) p_Y(z-x). 
+\end{align*}
+Therefore 
+$$
+p_Z(z) = \sum_{x=0}^z p_X(x) p_Y(z-x),
+$$
+which is the definition of $\left[p_X * p_Y\right](z)$.
+
+To prove (b), we start with the CDF and differentiate to get the PDF. The CDF of $Z$ is
+\begin{align*}
+F_Z(z) &= \PP(X+Y \leq z) \\
+&= \iint_S f_{X,Y}(x,y)dy dx ,
+\end{align*}
+where $S$ is the region $\{(x,y): x+y \leq z\}$. The double integral can be written as 
+$$
+\int_{-\infty }^{\infty} \int_{-\infty}^{z-x} f_{X,Y}(x,y)  dy dx.
+$$
+Again, by independence, we have
+$$
+F_Z(z) = \int_{-\infty}^{\infty}  \int_{-\infty}^{z-x} f_{X}(x) f_Y(y)  dy dx.
+$$
+Taking the derivative in $z$, and using the fundamental theorem of calculus, we arrive at 
+$$
+f_Z(z) = \int_{-\infty}^{\infty}  f_X(x) f_Y(z-x)dx,
+$$
+which is the definition of the convolution.
+\end{proof}
+
+We mention a few examples:
+
+\begin{example}
+Suppose $X\sim \text{Ber}(p_1)$ and $Y\sim \text{Ber}(p_2)$ are independent Bernoulli random variables. We can use convolution to find the PMF of $X+Y$. Set $Z=X+Y$. The range of values of $Z$ is $\{0,1,2\}$.  If $Z=0$, then $X=Y=0$, so
+$$
+p_Z(0) = (p_X * p_Y)(0) = p_X(0)p_Y(0) = (1-p_1)(1-p_2).
+$$
+If $Z=1$, then $X=0,Y=1$ or $X=1,Y=0$, so 
+$$
+p_Z(1) = (p_X * p_Y)(1) = p_X(0)p_Y(1) + p_X(1)p_Y(0) = (1-p_1)p_2 + p_1(1-p_2). 
+$$
+If $Z=2$ then $X=Y=1$, so 
+$$
+p_Z(2) = (p_X * p_Y)(2) = p_X(1)p_Y(1) = p_1p_2.
+$$
+So the final answer is
+$$
+p_Z(z) = 
+\begin{cases}
+(1-p_1)(1-p_2), & \text{ if } z=0, \\
+(1-p_1)p_2+p_1(1-p_2), & \text{ if } z=1, \\
+p_1p_2, & \text{ if } z=2.
+\end{cases}
+$$
+
+\end{example}
+
+\begin{example}
+Suppose that $X \sim \text{Pois}(\lambda_1)$ and $Y \sim \text{Pois}(\lambda_2)$ are independent Poisson random variables. We will use convolution to show that $X+Y \sim \text{Pois}(\lambda_1 + \lambda_2)$.
+
+Setting $Z=X+Y$, we have
+\begin{align*}
+p_Z(z) &= \sum_{x=0}^z e^{-\lambda_1} \frac{\lambda_1^x}{x!} \cdot e^{-\lambda_2} \frac{\lambda_2^{z-x}}{(z-x)!}\\
+&= e^{-\lambda_1 - \lambda_2}\sum_{x=0}^z \lambda_1^x \lambda_2^{z-x} \frac{1}{x! (z-x)!}\\
+&=  \frac{e^{-\lambda_1 - \lambda_2}}{z!}\sum_{x=0}^z \lambda_1^x \lambda_2^{z-x} \frac{z!}{x! (z-x)!}\\
+\end{align*}
+To evaluate this sum, we can recognize this as a $\textrm{Bin}(z,\lambda_1/(\lambda_1 + \lambda_2))$. In particular, this tell us that if $W \sim \textrm{Bin}(z,\lambda_1/(\lambda_1 + \lambda_2))$, then normalizations implies that
+\begin{align*}
+1 &= \sum_{x=0}^z p_W(x) \\
+&= \sum_{x=0}^z \left(\frac{\lambda_1}{\lambda_1 + \lambda_2}\right)^x \left( \frac{\lambda_2}{\lambda_1 + \lambda_2}\right)^{z-x} \binom{z}{x} .
+\end{align*}
+Multiplying both sides by $(\lambda_1 + \lambda_2)^z$ yields
+$$
+\sum_{x=0}^z \lambda_1^x \lambda_2^{z-x} \frac{z!}{x! (z-x)!} = (\lambda_1 + \lambda_2)^z.
+$$
+
+Plugging this sum back in above,
+$$
+p_Z(z) = e^{-\lambda_1 - \lambda_2} \frac{(\lambda_1+ \lambda_2)^z}{z!},
+$$
+which is the PDF of the Poisson random variable of parameter $\lambda_1 + \lambda_2$.
+
+How might we understand this intuitively? Let's return to the example of deaths by horse kicks per year in the Prussian army. The data indicated that this was distributed as $\mathrm{Pois}(0.62)$, meaning that on average there were $0.62$ deaths by horse kicks per year. We don't have data about death by horse kicks per year in the French army. For sake of argument, suppose that this is distributed as $\mathrm{Pois}(0.31)$, so they happened about half as frequently as in the Prussian army. (Perhaps the French have fewer horses than the Prussians\footnote{Historical trivia: the French did not use cavalry in warfare until the Seven Years' War in 1756--1763, whereas the Prussian army had already used cavalry during the First Silesian War in 1740--1742.}). If we assume that the French and Prussian armies act independently of each other, and we consider deaths in the combined armies, then the conditions (rare events, independence) still hold. Thus, we could model it as a Poisson random variable. The total average will now be $0.93=0.62+0.31$, so the parameter is now $0.93$.
+
+Where does the binomial come in to this problem? Well, if we're told that there is a \textit{single} death by horse kick in the combined armies, there is a $0.31/0.93=1/3$ probability that it occurred in the French army and a $0.62/0.93=2/3$ probability that it occurred in the Prussian army. Since the deaths will occur independent of each other, the distribution of $z$ deaths in the French army is given by a binomial.
+\end{example}
+
+\begin{example}
+Now for a continuous example. Suppose that $X$ and $Y$ are independent random variables distributed as $\mathcal{N}(0,1)$. We will use convolution to show that $Z:=X+Y \sim \mathcal{N}(0,2)$.
+
+By convolution,
+\begin{align*}
+f_Z(z) &= \int_{-\infty}^{\infty} f_X(x) f_Y(z-x) dx \\
+&= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2 \pi}} e^{-x^2/2} \frac{1}{ \sqrt{2\pi}} e^{-(z-x)^2/2} dx.
+\end{align*}
+By completing the square
+$$
+\frac{-x^2}{2} - \frac{(z-x)^2}{2} = \frac{-z^2 + 2zx -2x^2}{2} = - \frac{z^2}{2} + \frac{z^2}{4} - \left( x- \frac{z}{2}\right)^2,
+$$
+so we get that
+$$
+f_Z(z) = \frac{1}{2\pi} e^{-z^2/4} \int_{-\infty}^{\infty} e^{-(x-z/2)^2} dx.
+$$
+By $u$--substitution, with $x-z/2 = u/\sqrt{2}, \ dx=du/\sqrt{2}$, we get
+$$
+f_Z(z) = \frac{1}{2\pi \sqrt{2}} e^{-z^2/4} \int_{-\infty}^{\infty} e^{-u^2/2} du .
+$$
+The integral simplifies to $1$, so we are left with the PDF of $\mathcal{N}(0,2)$.
+\end{example}
+\subsection{Correlation}
+\begin{definition}
+Given two random variables (discrete or continuous) $X$ and $Y$, their covariance is defined by 
+\begin{equation*}
+\begin{aligned} \operatorname{cov}(X,Y) &=\mathbb{E}[(X-\mathbb{E} [X])(Y-\mathbb{E} Y)] \\ &=\mathbb{E}[XY]-\mathbb{E}[X] \mathbb{E}[Y] .\end{aligned}
+\end{equation*}
+
+The correlation coefficient $\rho(X,Y)$ is defined by 
+$$
+\rho(X,Y)  = \frac{\mathrm{cov}(X,Y)}{\sqrt{ \Var(X) \Var(Y) }}.
+$$
+The correlation coefficient is always between $-1$ and $1$.
+
+If $\rho(X,Y)=0$, then we say that $X$ and $Y$ are uncorrelated. If $\rho(X,Y) >0$, then we say that $X$ and $Y$ are positively correlated. If $\rho(X,Y)<0$, then we say that $X$ and $Y$ are negatively correlated.
+\end{definition}
+
+For finite data sets, this is called the \textit{Pearson correlation coefficient}.
+\begin{example}
+It is possible for random variables to be uncorrelated, but \textit{not} independent.
+
+Let $X\sim \mathcal{N}(0,1)$, and let $\epsilon$ be a discrete random variable with probability mass function
+$$
+p_{\epsilon}(1) = p_{\epsilon}(-1) = 1/2.
+$$
+In other words, $\PP(\epsilon=1) = \PP(\epsilon =-1)=1/2$. Set $Y=\epsilon X$. It is clear that $X$ and $Y$ are not independent, since $X$ and $Y$ always have the same absolute value.
+
+To find the covariance $\mathrm{cov}(X,Y)$, first we find $f_Y(y)$. This can be done from the total probability rule. Let $E_1$ be the event that $\{\epsilon=1\}$, and let $E_2$ be the event that $\{\epsilon=-1\}$. These form a partition of the sample space, so we have
+\begin{align*}
+f_Y(y) &= \PP(E_1) f_{Y \vert E_1}(y) + \PP(E_2) f_{Y \vert E_2}(y) \\
+&= \frac{1}{2} f_X(y) + \frac{1}{2}f_{-X}(y).
+\end{align*}
+Since $-X$ is a linear function of $X$, where $g(x)=-x$, we have that
+$$
+f_Y(y) = \frac{1}{2}f_X(y) + \frac{1}{2}f_X(-y).
+$$
+By symmetry, $f_X(y)=f_X(-y)$, so $f_Y(y)=f_X(y)$. This means that $X$ and $Y$ have the same PDF, so $Y$ is also distributed as $\mathcal{N}(0,1)$. 
+
+By the total expectation theorem,
+\begin{equation*}
+\begin{aligned} \mathbb{E}[X Y] &=\mathbb{P}\left(E_{1}\right) \mathbb{E}\left[X Y | E_{1}\right]+\mathbb{P}\left(E_{2}\right) \mathbb{E}\left[X Y | E_{2}\right] \\ &=\frac{1}{2} \mathbb{E}\left[X^{2}\right]+\frac{1}{2} \mathbb{E}\left[-X^{2}\right] \\ &=0 .\end{aligned}
+\end{equation*}
+And $\mathbb{E}[X]\mathbb{E}[Y] = 0\cdot 0 =0$. Therefore $\mathrm{cov}(X,Y)=0$.
+\end{example}
+
+
+Even though uncorrelated random variables need not be independent, we have:
+\begin{theorem}
+If $X$ and $Y$ are uncorrelated, the
+$$
+\Var(X+Y) = \Var(X) + \Var(Y).
+$$
+\end{theorem}
+
+\subsection{Conditional Expectation and Variance, revisited}
+
+Previously, I wrote down the equations for the conditional expectation:
+$$
+\mathbb{E}[X \vert Y=y] = \sum_x x \cdot p_{X \vert Y}(x \vert y).
+$$
+for discrete random variables $X,Y$; and
+$$
+\mathbb{E}[X \vert Y=y] = \int_{\mathbb{R}} x \cdot f_{X \vert Y}(x \vert y) dx.
+$$
+for continuous random variables $X,Y$.
+
+Here, we revisit the topic of conditional expectations, from a different perspective. The event $\{Y=y\}$ form a partition of the sample space $\Omega$ (since $Y$ takes exactly one value). To define a map on $\Omega$, it is sufficient to define a map on each $\{Y=y\}$. In particular, there is a map on $\Omega$ which takes the value $\mathbb{E}[X \vert Y= y]$ on the event $\{Y=y\}$. A map from $\Omega$ to $\mathbb{R}$ is just a random variable. 
+
+\begin{definition}
+The conditional expectation of $X$ given $Y$, denoted $\mathbb{E}[X \vert Y]$, is the random variable which takes the value $\mathbb{E}[X \vert Y=y]$ on the event $\{Y=y\} \subseteq \Omega$.
+
+An equivalent definition is as follows. Let $g$ be the function defined by $g(y) = \mathbb{E}[X \vert Y=y]$. Then $\mathbb{E}[X \vert Y] = g(Y)$.
+\end{definition}
+
+\begin{example}
+Suppose that you have a stick of length $L$, and you pick a point uniformly at random along the stick, and break it into two pieces. Let $Y$ be the length of the piece in your left hand. You then take that piece, and again pick a point uniformly at random along this stick, and then break it into two pieces. Let $X$ be the length of the piece in your left hand (after making two breaks). What is $\mathbb{E}[X \vert Y]$?
+
+Assume that $Y=y$. When you pick a point uniformly at random (the second time), you are picking a point uniformly at random in the interval $[0,y]$. The expectation of a uniform random variable in an interval is its midpoint, which in this case is $y/2$. This means that $\mathbb{E}[X \vert Y=y]=y/2$. So, replacing $y$ with $Y$, we get $\mathbb{E}[X \vert Y]=Y/2$.
+\end{example}
+
+\begin{example}
+Suppose that a factory produces coins. However, some of the coins come out biased. Let $Y$ denote the probability that a coin from this factory will give heads if its flipped. We don't know anything about $Y$, except that it is a random variable with values in $[0,1]$. Let $X$ be the number of heads if we flip this coin $n$ times. What is $\mathbb{E}[X\vert Y]$? 
+
+Assume that $Y=y.$ The conditional expectation $\mathbb{E}[X \vert Y=y]$ is the expectation of a $\textrm{Bin}(n,y)$, which is $ny$. So $\mathbb{E}[X \vert Y=y]=ny$, and replacing $y$ with $Y$, we get $\mathbb{E}[X \vert Y] = nY$.
+\end{example}
+
+The conditional expectation $\mathbb{E}[X \vert Y]$ satisfies a nice property called the law of iterated expectation:
+
+\begin{theorem} (Law of Iterated Expectation)
+
+For any random variables $X$ and $Y$,
+$$
+\mathbb{E}[\mathbb{E}[X \vert Y]] = \mathbb{E}[X].
+$$
+\end{theorem}
+\begin{proof}
+First assume that $X$ and $Y$ are discrete. By the total expectation theorem,
+\begin{align*}
+\mathbb{E}[ \mathbb{E}[X \vert Y]] &= \sum_y \mathbb{P}(Y=y) \mathbb{E}[ \mathbb{E}[X \vert Y] \vert Y=y] \\
+&= \sum_y  \mathbb{P}(Y=y) \mathbb{E}[X  \vert Y=y] \\
+&= \mathbb{E}[X].
+\end{align*}
+Similarly, if $X$ and $Y$ are continuous, then by the total expectation theorem
+\begin{align*}
+\mathbb{E}[ \mathbb{E}[X \vert Y]]&= \int f_Y(y) \mathbb{E}[ \mathbb{E}[X \vert Y] \vert Y=y]dy  \\
+&= \int f_Y(y) \mathbb{E}[ X \vert Y=y]dy\\
+&= \mathbb{E}[X].
+\end{align*}
+\end{proof}
+
+We also note a property of the conditional expectation which will be used a few times: 
+$$
+\mathbb{E}[X g(Y) \vert Y] = g(Y) \mathbb{E}[X \vert Y].
+$$
+In particular, since $\mathbb{E}[X \vert Y]$ is itself a function of $Y$,
+$$
+\mathbb{E}[\mathbb{E}[X \vert Y] \vert Y] = \mathbb{E}[X \vert Y].
+$$
+The ``intuitive'' understand of this: conditioning on $Y$ means we've updated our probabilities given the information about $Y$, but getting same information twice is the same as getting the same information once.
+
+Next, we'll mention an application of conditional expectation to estimators. (You may have seen these before in a statistics class). Let's say that we want to estimate a random variable $X$ given the data $Y$. We call $\widehat{X}$ an \textit{estimator of }$ X$ \textit{given} $Y$. The \textit{estimation error} is $\widetilde{X} = \widehat{X} - X$. A ``good'' estimator of $X$ should have the same mean as $X$; additionally, the estimator should be uncorrelated with the estimation error. We'll see that $\widehat{X} = \mathbb{E}[X \vert Y]$ satisfies both these properties. 
+
+The first property says that $\mathbb{E}[\widetilde{X}]=0$. To prove that this is true, we first use the law of iterated expectation $\mathbb{E}[\widetilde{X}] = \mathbb{E}[ \mathbb{E}[ \widetilde{X} \vert Y]]$. By definition, 
+$$
+\mathbb{E}[ \widetilde{X} \vert Y ] = \mathbb{E}[ \widehat{X} - X \vert Y].
+$$
+By linearity,
+$$
+\mathbb{E}[ \widetilde{X} \vert Y ] = \mathbb{E}[\widehat{X} \vert Y] - \mathbb{E}[X \vert Y].
+$$
+But by the property mentioned above,
+$$
+\mathbb{E}[\widehat{X} \vert Y] = \mathbb{E}[ \mathbb{E}[X \vert Y]] = \mathbb{E}[X \vert Y].
+$$
+Plugging this into the previous equation means that
+$$
+\mathbb{E}[ \widetilde{X} \vert Y ] =0.
+$$
+And thus $\mathbb{E}[\widetilde{X}]=0$.
+
+For the second property, we want to show that $\mathrm{cov}(\widehat{X}, \widetilde{X})=0$. By definition, this equals
+$$
+\mathrm{cov}(\widehat{X}, \widetilde{X})= \mathbb{E}[\widehat{X} \widetilde{X}] - \mathbb{E}[\widehat{X}] \mathbb{E}[\widetilde{X}].
+$$
+We just saw that $\mathbb{E}[\widetilde{X}]=0$, so it just remains to show that $\mathbb{E}[\widehat{X} \widetilde{X}]=0$. By the law of iterated expectation, we just have to show that $\mathbb{E}[\widehat{X} \widetilde{X} \vert Y]=0$. But by the property mentioned above,
+$$
+\mathbb{E}[\widehat{X} \widetilde{X} \vert Y] = \widehat{X} \mathbb{E}[\widetilde{X} \vert Y] = \widehat{X} \cdot 0 =0.
+$$
+So this is what we wanted to show.
+
+In addition to the conditional expectation, there is also conditional variance:
+
+\begin{definition}
+Let $\widetilde{X} = \hat{X} -X$ as before. Define the conditional variance of $X$ given $\{Y=y\}$ as
+$$
+\mathrm{Var}(X \vert Y=y) = \mathbb{E}[\widetilde{X}^2 \vert Y=y].
+$$
+Define the conditional variance of $X$ given $Y$ as
+$$
+\mathrm{Var}(X \vert Y) = \mathbb{E}[\widetilde{X}^2 \vert Y].
+$$
+\end{definition}
+
+\begin{example}
+Return to the coin example, where $Y$ was the bias of the coin, and $X$ was the number of heads after $n$ flips. If $Y=y$, then the conditional variance $\Var(X \vert Y=y)$ is the variance of $\textrm{Bin}(n,y)$, which is $ny(1-y)$. So
+$$
+\Var(X \vert Y=y) = ny(1-y).
+$$
+Replacing $y$ by $Y$,
+$$
+\Var(X \vert Y) = nY(1-Y).
+$$
+\end{example}
+
+\begin{theorem} (Law of Total Variance)
+For random variables $X$ and $Y$,
+$$
+\Var(X) = \mathbb{E}[\Var(X \vert Y)] + \Var(\mathbb{E}[ X \vert Y]).
+$$
+\end{theorem}
+\begin{proof}
+By definition,
+$$
+\Var(\widetilde{X}) = \EE[\widetilde{X}^2] - \EE[\widetilde{X}]^2.
+$$
+But we know that $\EE[\widetilde{X}]=0$. By the law of the iterated expectation applied to the first term,
+$$
+\Var(\widetilde{X}) = \EE[ \EE[ \widetilde{X}^2 \vert Y]] = \EE[\Var(X \vert Y)].
+$$
+Since $\tilde{X}$ and $\widehat{X}$ are uncorrelated, 
+$$
+\Var(X) = \Var(\widehat{X} + \tilde{X}) = \Var(\widehat{X} )+ \Var(\tilde{X}) .
+$$
+This yields the law of total variance.
+\end{proof}
+
+\begin{example}
+Again, returning to the biased coin problem. We've seen that $\EE[X \vert Y] = nY$ and $\Var(X \vert Y)=nY(1-Y)$. Therefore
+$$
+\Var(X) = n\cdot \EE[Y(1-Y)] +  \Var(nY).
+$$
+\end{example}
+
+We mention some intuition for the law of total variance. The first is to notice that
+$$
+\Var(X) \geq \EE[\Var(X \vert Y)],
+$$
+because the variance is always non--negative. This can interpreted as saying that uncertainty always decreases with more information. 
+
+For another example: suppose that $X$ is the height of a random person chosen in the world, and $Y$ is the country of a random person chosen in the world. Then $\EE[\Var(X \vert Y)]$ is the average variance within a country, and $\Var(\EE[X \vert Y])$ is the variance across countries. The total variance is just their sum.
+
+\subsection{The Laplace transform}
+
+The Laplace transformation, named after Pierre--Simon Laplace,\footnote{Pierre--Simon Laplace served as Minister of the Interior under Napoleon for six weeks in 1799.} is a powerful tool for analyzing random variables. 
+
+\begin{definition}
+The Laplace transform $M_X(s)$ of the random variable $X$ is the function defined by 
+$$
+M_X(s) = \mathbb{E}[e^{sX}].
+$$
+In the discrete case, 
+$$
+M_X(s) = \sum_x e^{sx} p_X(x).
+$$
+In the continuous case, 
+$$
+M_X(s) = \int_{-\infty}^{\infty} e^{sx} f_X(x) dx.
+$$
+\end{definition}
+
+There isn't really a good intuition for Laplace's transform. It's just a formula, more or less.
+
+\begin{example}
+We find the Laplace transform for some common examples of $X$:
+\begin{itemize}
+\item
+If $X \sim \mathrm{Ber}(p)$, then 
+$$
+M_X(s) = (1-p) +e^s \cdot p.
+$$
+
+\item
+If $X\sim \mathrm{Pois}(p)$, then
+\begin{align*}
+M_X(s) &= \sum_{k=0}^{\infty} e^{sk} \frac{\lambda^k}{k!} e^{-\lambda}\\
+&= e^{-\lambda} \sum_{k=0}^{\infty} \frac{(\lambda e^s)^k}{k!} \\
+&= e^{-\lambda} \cdot e^{\lambda e^s}.
+\end{align*}
+
+\item
+If $X \sim \mathrm{Exp}(\lambda)$, then
+\begin{align*}
+M_X(s) = \int_0^{\infty} e^{sx} \cdot \lambda e^{-\lambda x} dx &= \int_0^{\infty} \lambda e^{(s-\lambda)x}dx \\
+&= \frac{\lambda}{\lambda-s}.
+\end{align*}
+Note that this is only defined for $s<\lambda$. For $s \geq \lambda$, the integral is an improper integral, so $M_X(s)$ is undefined.
+
+\item
+If $X \sim \mathcal{N}(0,1)$, then
+\begin{align*}
+M_X(s) &= \int_{-\infty}^{\infty} e^{sx} \frac{1}{\sqrt{2\pi}} e^{-x^2/2}dx \\
+&= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-(x-s)^2/2} e^{s^2/2} \\
+&= e^{s^2/2}.
+\end{align*}
+\end{itemize}
+\end{example}
+
+The Laplace transform is also called the moment generating function (MGF), depending on who you ask. This is due to the following theorem:
+\begin{theorem}
+For a random variable $X$ with moment generating function $M_X(s)$,
+$$
+\frac{d^n}{ds^n} M(s) \Big|_{s=0} = \EE[X^n].
+$$
+\end{theorem}
+\begin{proof}
+From calculus,
+$$
+\frac{d^n}{ds^n} e^{sx} \Big|_{s=0} = x^n e^{sx} \Big|_{s=0} = x^n.
+$$
+By exchanging the derivative with the expectation (in the definition of $M_X(s)$), this shows the result.
+\end{proof}
+
+One of the reasons this is a powerful tool is that it becomes easy to calculate the moments of $X$ from its MGF:
+\begin{example}
+If $X\sim \mathrm{Exp}(\lambda)$, then $\EE[X^n] = n! /\lambda^n$. To see this, just note that
+$$
+\frac{d^n}{ds^n} \frac{\lambda}{\lambda -s} \Big|_{s=0} = n! \frac{\lambda}{(\lambda-s)^{n+1}} \Big|_{s=0} = \frac{n!}{\lambda^n}.
+$$
+\end{example}
+
+In addition, the moment generating function $M_X(s)$ uniquely determines the random variable $X$, in many circumstances:
+\begin{theorem}\label{MGF}
+Suppose that $M_X(s)$ exists and is finite in some interval containing $0$. Then there is a unique random variable $X$ such that its moment generating function is $M_X(s)$.
+\end{theorem}
+
+There is a formula to determine $X$ from $M_X(s)$; however, it involves complex integration, so we will not discuss it in this class.
+
+The theorem begs this question: when would $M_X(s)$ \textit{not} exist? The typical example of this is the \textit{log--normal} distribution. This is a distribution $X$ such that $\ln(X) \sim \mathcal{N}(0,1)$. In other words,
+$$
+F_X(x) = \Phi(\ln \ x).
+$$
+Taking the derivative in $x$, and using the chain rule, 
+\begin{align*}
+f_X(x) &= \Phi'(\ln \ x) \cdot x^{-1} \\
+&= \frac{1}{x \sqrt{2\pi} }e^{-(\ln x)^2/2}.
+\end{align*}
+But 
+$$
+\int_{-\infty}^{\infty} e^{-sx} \frac{1}{x \sqrt{2\pi}} e^{-(\ln x)^2/2}
+$$
+is an improper integral, because the integrand only decays as $x^{-1}$. So $M_X(s)$ is undefined.
+
+A qualitative understanding of this example is that if the distribution is ``too spread out,'' there is no moment generating function. One way to measure ``too spread out'' is to look at the growth of $\EE[X^n]$ in $n$. In this case, $\EE[X^n]=e^{n^2/2}$ for the log--normal, which grows extremely quickly (faster than exponentially!). The log--normal distribution happens to also model wealth distribution.
+
+We also mention a property of the MGF. If $Y=aX+b$, then
+\begin{equation}\label{Diff}
+M_Y(s) = e^{sb}M_X(as).
+\end{equation}
+In the discrete case, this follows from direct computation. In the continuous case, this follows immediately from $u$--substitution and Proposition \ref{11}.
+\begin{example}
+Suppose $Y\sim \mathcal{N}(\mu,\sigma^2)$. Then $Y=\sigma X + \mu$ for $X \sim \mathcal{N}(0,1)$, so 
+$$
+M_Y(s) = e^{\mu s} e^{\sigma^2 s^2/2}.
+$$
+\end{example}
+
+In addition to calculating moments, the MGF works well with sums of independent random variables:
+\begin{theorem}
+If $X$ and $Y$ are independent, then
+$$
+M_{X+Y}(s) = M_X(s) M_Y(s).
+$$
+\end{theorem}
+\begin{proof}
+We know that
+$$
+\EE[g(X)h(Y)] = \EE[g(X)] \cdot \EE[h(Y)].
+$$
+Setting $g(x) = e^{sx}$ and $h(y)=e^{sy}$ shows that
+$$
+\EE[e^{s(X+Y)}] = \EE[e^{sX}e^{sY}] = \EE[e^{sX}] \cdot \EE[e^{sY}].
+$$
+By definition of MGF, this is the statement of the theorem.
+\end{proof}
+
+\begin{example}\label{Bin}
+Let $X\sim \textrm{Bin}(n,p)$. Because a binomial is the sum of independent Bernoullis, we have
+$$
+M_X(s) = (1-p+pe^s)^n.
+$$
+\end{example}
+
+\begin{example}
+Suppose that $X\sim \mathcal{N}(\mu_X,\sigma_X^2)$ and $Y\sim \mathcal{N}(\mu_Y,\sigma_Y^2)$ are independent normal random variables. Then
+\begin{align*}
+M_{X+Y}(s) = M_X(s)M_Y(s) &= e^{\mu_X s} e^{\sigma_X^2 s^2/2}e^{\mu_Y s} e^{\sigma_Y^2 s^2/2}\\
+&= e^{(\mu_X+\mu_Y) s} e^{(\sigma_X^2 + \sigma_Y^2)s^2/2}.
+\end{align*}
+By Theorem \ref{MGF}, $X+Y \sim \mathcal{N}(\mu_X + \mu_Y, \sigma_X^2 + \sigma_Y^2)$.
+\end{example}
+
+We can use the MGF to show that the Binomial approximates the normal distribution. You saw this the first week of class (on the Galton board).
+\begin{theorem} (de Moivre -- Laplace)
+
+Suppose that $X \sim \textrm{Bin}(n,p)$; or equivalently, $X$ is the sum of n independent $\textrm{Ber}(p)$ random variables.  Set 
+$$
+Y_n = \frac{X-pn}{\sqrt{n}}.
+$$ 
+Then 
+$$
+\lim_{n\rightarrow \infty} M_{Y_n}(s) = e^{p(1-p) s^2/2},
+$$
+which is the MGF of the standard normal distribution $\mathcal{N}(0,p(1-p))$. (Note that $p(1-p)$ is the variance of the \textrm{Ber}(p)).
+\end{theorem}
+\begin{proof}
+We rewrite ${Y_n}=n^{-1/2}X - pn^{1/2}.$ By \eqref{Diff},
+$$
+M_{Y_n}(s) = e^{-p n^{1/2} s} M_X( s n^{-1/2}).
+$$
+By \eqref{Bin},
+$$
+M_{Y_n}(s) = e^{-p n^{1/2} s}  ( 1 - p + p e^{sn^{-1/2}})^n.
+$$
+
+Evaluating this limit is an exercise in L'H\^{o}pital's rule. First rewrite 
+$$
+M_{Y_n}(s) = \left( (1-p) e^{-pn^{-1/2}s} + pe^{(1-p)n^{-1/2}s} \right)^n.
+$$
+Taking the natural logarithm yields
+$$
+\ln M_{Y_n}(s) = n \ln \left( (1-p) e^{-pn^{-1/2}s} + pe^{(1-p)n^{-1/2}s}  \right).
+$$
+For simplicity, set $m=n^{-1/2}$. Then
+$$
+\lim_{n\rightarrow \infty} \ln M_{Y_n}(s) = \lim_{m\rightarrow 0} \frac{\ln\left( (1-p) e^{-pms} + p e^{(1-p)ms}    \right)}{m^2}.
+$$
+By one application of L'H\^{o}pital's rule,
+\begin{align*}
+\lim_{n\rightarrow \infty} \ln M_{Y_n}(s) &= \lim_{m\rightarrow 0} \frac{\left( (1-p) e^{-pms} + p e^{(1-p)ms}    \right)^{-1}  ( (1-p)(-ps)e^{-pms} + p e^{(1-p)ms}(1-p)s   )}{2m}\\
+&= (1-p)p \lim_{m\rightarrow 0} \frac{-s e^{-pms} + e^{(1-p)ms}s}{2m}.
+\end{align*}
+And one last application of L'H\^{o}pital's rule yields 
+$$
+(1-p)p \lim_{m\rightarrow 0} \frac{ps^2 e^{-pms} + (1-p)s^2 e^{(1-p)ms}}{2} = (1-p)p \frac{s^2}{2}.
+$$
+\end{proof}
+
+We conclude with an example of the sum of a \textit{random} number of independent random variables. Let 
+$$
+Y= X_1 + \ldots + X_N,
+$$
+where the $\{X_i\}$ are independent with the identical distribution (often abbreviated i.i.d.). Here, $N$ is itself a random variable on $\{0,1,2,\ldots\}$. Let $X$ denote the common distribution. Then
+\begin{align*}
+\mathbb{E}[Y \vert N=n] &= n \mathbb{E}[X]\\
+\mathbb{E}[Y \vert N] &= N \mathbb{E}[X].
+\end{align*}
+So by the law of iterated expectation,
+$$
+\mathbb{E}[Y] = \EE[\mathbb{E}[Y \vert N] ]= \EE[N] \EE[X].
+$$
+Similarly,
+\begin{align*}
+\Var(Y \vert N=n) &= n \Var(X)\\
+\Var(Y \vert N) &= N \Var(X).
+\end{align*}
+By the law of total variance,
+$$
+\Var(Y) = \EE[N] \cdot \Var(X) + \EE[X]^2 \cdot \Var(N).
+$$
+
+Even more than the expectation and variance, we can find the MGF. By the law of the iterated expectation,
+$$
+M_Y(s) = \EE[e^{sY}] = \EE[\EE[e^{sY} \vert N]].
+$$
+Since $EE[e^{sY} \vert N=n] = M_X(s)^n$, we have
+$$
+M_Y(s) = \EE[M_X(s)^N].
+$$
+We can write this expectation in terms of the PMF of $N$, getting
+$$
+M_Y(s) = \sum_{n=0}^{\infty} M_X(s)^n p_N(n).
+$$
+Since $M_X(s)^n = e^{n\ln M_N(s)}$, we can relate the MGF of $Y$ and $N$:
+$$
+M_Y(s) = M_N(\ln M_X(s)).
+$$
+
+\begin{example}
+See the homework problem about visiting bookstores. 
+\end{example}
+
+
+\newpage
+
+\end{document}

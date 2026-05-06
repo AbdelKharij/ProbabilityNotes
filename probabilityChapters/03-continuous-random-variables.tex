@@ -1,0 +1,495 @@
+\documentclass{ximera}
+\input{../xmPreamble}
+
+\title{Chapter 3}
+\begin{document}
+\begin{abstract}
+\end{abstract}
+\maketitle
+\section{Continuous Random Variables}
+
+
+\subsection{Cumulative Distribution Functions}
+So far, we've seen PMFs for discrete random variables, defined by
+$$
+p_X(x) = \PP(X=x).
+$$
+However, if $X$ is continuous, then $\PP(X=x)=0$ for all $x$, so this definition is not suitable for continuous random variables. A different approach is needed.
+
+\begin{definition}
+The cumulative distribution function (CDF) of a random variable $X$ (discrete or continuous) is the function
+$$
+F_X(x) = \mathbb{P}(X \leq x).
+$$
+\end{definition}
+
+A few properties of the CDF:
+\begin{itemize}
+\item
+The CDF is monotonically increasing, meaning that if $x \leq y$ then $F_X(x) \leq F_X(y)$. This follows from the non--negativity axiom.
+\item
+We have the following limits in $x$:
+\begin{align*}
+\lim_{x \rightarrow -\infty} F_X(x) &= 0,\\
+\lim_{x \rightarrow  \infty} F_X(x) &= 1.
+\end{align*}
+The second equation follows from normalization.
+\end{itemize}
+
+In the discrete case, the CDF can be written as the sum over the PMF:
+$$
+F_X(x) = \sum_{y \leq x} p_X(y).
+$$
+
+\begin{example}
+Let $X \sim \mathrm{Geo}(p)$. What is its CDF $F_X(x)$? Start with  
+$$
+p_X(x) = (1-p)^x p \text{ for } x=0,1,2,\ldots.
+$$
+Its sum is a geometric series:
+\begin{align*}
+F_X(x) &= \sum_{y=0}^x (1-p)^y p \\
+&= p \frac{ 1 - (1-p)^{x+1}}{1- (1-p)} \\
+&= 1 - (1-p)^{x+1}
+\end{align*}
+for integer values of $x$. For non--integer values of $x$, we let $\lfloor x \rfloor$ denote the integer smaller than or equal to $x$. So for example, $\lfloor 3.5\rfloor = 3$ and $\lfloor 4 \rfloor = 4$. (The function $\lfloor \cdot \rfloor$ is called the floor function). So
+$$
+F_X(x) = 
+\begin{cases}
+1- (1-p)^{\lfloor x \rfloor + 1}, \text{ if } x \geq 0,\\
+0, \text{ else }.
+\end{cases}
+$$
+We can see directly that
+$$
+\lim_{x\rightarrow -\infty} F(x) = 0, \quad \lim_{x \rightarrow \infty} F(x) = 1.
+$$
+\end{example}
+
+Given the cumulative distribution function of $X$, we can recover its PMF (for $X$ discrete, taking integer values). Since
+$$
+F_X(x) = \sum_{y=-\infty}^x p_X(y),
+$$
+so 
+$$
+p_X(x) = F_X(x) - F_X(x-1).
+$$
+
+
+
+\subsection{Probability Distribution Functions}
+
+\begin{definition}
+The probability distribution function $f_X(x)$ of a continuous random variable is the derivative of the cumulative distribution function $F_X(x)$:
+$$
+f_X(x) = F_X'(x).
+$$
+\end{definition}
+Some important properties of the $\pdf$:
+\begin{itemize}
+\item 
+For all $x$,
+$$
+f_X(x) \geq 0.
+$$
+This follows from the non--negativity axiom.
+\item
+If $I$ is the set of all values $x$ for which $f_X(x) > 0$, then
+$$
+\int_{I} f_X(x) dx = 1.
+$$
+The textbook writes this as
+$$
+\int_{-\infty}^{\infty} f_X(x) dx = 1.
+$$
+In any case, this property follows from normalization.
+
+\end{itemize}
+
+\begin{example}
+Let $X$ be uniform on the interval $[a,b]$. Let's find its $\pdf$. Notice that $f_X(x)$ is only nonzero when $a \leq x \leq b$, because $[a,b]$ is the set of values that $x$ could take. Because $X$ is uniform, $f_X(x)=c$ on $[a,b]$. By the normalization axiom,
+$$
+\int_a^b c dx = (b-a)c= 1,
+$$
+so $c= 1/(b-1)$. Thus the answer is
+$$
+f_X(x)
+= 
+\begin{cases}
+\dfrac{1}{b-a}, &\quad a \leq x \leq b \\
+0, & \text{ else}.
+\end{cases}
+$$
+Please note that writing just
+$$
+f_X(x) = \frac{1}{b-a}
+$$
+is \textit{incorrect} because it does not specify the range of $x$.
+\end{example}
+
+Unlike probability mass functions, probability distribution functions can sometimes be unbounded. For instance,
+$$
+f_X(x)
+= 
+\begin{cases}
+\dfrac{1}{2\sqrt{x}}, & 0 < x \leq 1,\\
+0, & \text{else}
+\end{cases}
+$$
+is the probability distribution function of a random variable $X$.
+
+\begin{example}
+The exponential random variable $\mathrm{Exp}(\lambda)$ with parameter $\lambda$ has $\pdf$
+$$
+f_X(x)
+= 
+\begin{cases}
+\lambda e^{-\lambda x}, & \text{ if } x \geq 0\\
+0, & \text{ otherwise }.
+\end{cases}
+$$
+The exponential random variable is related to the Poisson random variable $\mathrm{Pois}(\lambda)$. The Poisson random variables \textit{counts the number} of occurrences of an event, whereas the Poisson random variable gives the \textit{amount of time} you have to wait until the next event.
+\end{example}
+
+
+In the continuous case, the CDF is an integral over the PDF:
+$$
+F_X(x) = \int_{-\infty}^x f_X(y)dy.
+$$
+This contrasts with the discrete case, where you take a sum over the PMF.
+
+
+
+
+
+
+
+Now let $X \sim \mathrm{Exp}(\lambda)$. Recall that
+$$
+f_X(x)
+= 
+\begin{cases}
+\lambda e^{-\lambda x}, & \text{ if } x \geq 0, \\
+0, & \text{ otherwise }.
+\end{cases}
+$$
+For $x \leq 0$, we have $F_X(x)=0$. For $x>0$,
+\begin{align*}
+F_X(x) &= \int_0^x \lambda e^{-\lambda t}dt \\
+&= - e^{-\lambda t} \vert_0^x \\
+&= 1 - e^{-\lambda x}.
+\end{align*}
+Again, we can see directly that
+$$
+\lim_{x\rightarrow -\infty} F(x) = 0, \quad \lim_{x \rightarrow \infty} F(x) = 1.
+$$
+
+\begin{example}
+The normal distribution $\mathcal{N}(\mu,\sigma^2)$ has $\pdf$
+$$
+f_X(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-(x-\mu)^2/(2\sigma^2)}.
+$$
+\end{example}
+
+
+
+In the examples above, the constants in front of the $\pdf$ come from the normalization property (from Kolmogorov's normalization axiom):
+$$
+\int_{-\infty}^{\infty} f_X(x)dx = 1.
+$$
+For example, by $u$--substitution,
+\begin{align*}
+\int_0^{\infty} \lambda e^{-\lambda x}dx &= -\int_0^{-\infty} e^{u} du \\
+&= -e^u \Big|_{u=0}^{-\infty} \\
+&= 0 - (-1) \\
+&= 1.
+\end{align*}
+where $u=-\lambda x, du= -\lambda$.
+
+Before, we saw that for discrete random variables, the expectation can be found from the probability mass function. A similar statement holds here, using the $\pdf$. We just replace the sum with an integral.
+
+\begin{definition}
+The expectation of a continuous random variable $X$ is
+$$
+\mathbb{E}[X] = \int_{-\infty}^{\infty} x \cdot f_X(x) dx.
+$$
+More generally,
+$$
+\mathbb{E}[g(X)] = \int_{-\infty}^{\infty} g(x) \cdot f_X(x) dx.
+$$
+\end{definition}
+
+The simplest example of an expectation is the uniform random variable on $[a,b]$. Then
+\begin{align*}
+\mathbb{E}[X] &= \int_a^b x \frac{dx}{b-a} \\
+&= \frac{x^2}{2(b-a)} \Big|_a^b \\
+&= \frac{b^2-a^2}{2(b-a)} \\
+&= \frac{b+a}{2}.
+\end{align*}
+So the expectation is the midpoint of the interval. 
+
+Recall integration by parts, which we will use to find expectations of other random variables:
+$$
+\int udv = uv - \int v du.
+$$
+For example, to find the expectation of $\textrm{Exp}(\lambda)$, we have
+$$
+\mathbb{E}[X] = \int_0^{\infty} x \cdot \lambda e^{-\lambda x}dx.
+$$
+To evaluate this, integrate by parts with $u=x$ and $dv = \lambda e^{-\lambda x}dx$. Then $du=dx$ and $v = -e^{-\lambda x}$, and the result is
+\begin{align*}
+ \int_0^{\infty} x \cdot \lambda e^{-\lambda x}dx. &= - x e^{-\lambda x} \Big|_{x=0}^{\infty} + \int_0^{\infty} e^{-\lambda x}dx\\
+&=  0 - \lambda^{-1} e^{-\lambda x} \Big|_{x=0}^{\infty} \\
+&= \lambda^{-1}.
+\end{align*}
+For example, suppose that on average, two car accidents happen in College Station every month. Let $X$ be the random variable that counts the number of accidents next month. Then $X$ is discrete (since the number of accidents is $0,1,2,\ldots$), and can be modeled as $\mathrm{Pois}(2)$, since the average number of car accidents is two. Let $Y$ be the random variable that is the amount of time until the next accident. Then $Y$ is continuous (since time is continuous), and on average you have to wait half a month until the next accident. So $Y$ can be modeled as $\mathrm{Exp}(2)$.
+
+The expectation of the normal distribution $\mathcal{N}(\mu,\sigma^2)$ is given by $\mu$, since the $\pdf$ is symmetric around $\mu$. (See the previous homework problem). To see this more directly, we can directly integrate
+\begin{align*}
+\int_{-\infty}^{\infty} x \cdot \frac{1}{\sqrt{2\pi} \sigma} e^{-(x-\mu)^2/(2\sigma^2)}dx &=  \int_{-\infty}^{\infty} (x+\mu) \cdot \frac{1}{\sqrt{2\pi} \sigma} e^{-x^2/(2\sigma^2)}dx\\
+&=  \int_{-\infty}^{\infty} x \cdot \frac{1}{\sqrt{2\pi} \sigma} e^{-x^2/(2\sigma^2)}dx +  \int_{-\infty}^{\infty} \mu \cdot \frac{1}{\sqrt{2\pi} \sigma} e^{-x^2/(2\sigma^2)}dx 
+\end{align*}
+The second integral is $\mu\cdot 1 = \mu$. To find the first integral, use could another $u$--substitution with  $u = \frac{-x^2}{2 \sigma^2}$ and $ du = -x/\sigma^2 dx$; the much simpler way is to just notice that the integrand is an odd function in $x$, so the integral is $0$. This shows that the expectation is $0+\mu=\mu$.
+
+Recall (from a homework problem) that the geometric random variable is memoryless. The exponential random variable is memoryless as well. It turns out that we can use the CDF to approximate the exponential random variable with the geometric random variable (we will see more of this later). In particular, recall that
+$$
+e^y = \lim_{m \rightarrow \infty} \left( 1 + \frac{y}{m}\right)^m.
+$$
+So 
+$$
+1 - e^{-\lambda x} = 1- (e^{-\lambda})^x \approx 1- \left(1- \frac{\lambda}{m}\right)^{mx}
+$$
+This means that 
+$$
+F_{\mathrm{Exp}(\lambda)}(x) \approx F_{\mathrm{Geo}{(\lambda/m)}}(mx).
+$$
+
+Now let $X \sim \mathcal{N}(0,1)$. Recall that this means that $X$ is a Gaussian random variable with mean $\mathbb{E}[X]=0$ and variance $\mathrm{var}(X)=1$. The CDF of $\mathcal{N}(0,1)$ is commonly denoted with $\Phi$:
+$$
+\Phi(x) = \mathbb{P}(X \leq x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^x e^{-t^2/2}dt.
+$$
+Since the PDF of $X$ is symmetric, note that
+$$
+\Phi(-y) = 1 - \Phi(y).
+$$
+The common values of $\Phi$ are
+$$
+\Phi(1) = 0.8413, \quad \Phi(2) = 0.9772, \quad \Phi(3) = 0.9987.
+$$
+This means that $\Phi(-1)=1-0.8413=0.1587$, so 
+\begin{align*}
+\PP(-1 \leq X \leq 1) &= \PP(X \leq 1) - \PP(X \leq -1)\\
+&= 0.8413-0.1587 \approx 68\%
+\end{align*}
+This means that in a normal distribution, there is about a 68\% chance of a result within one standard deviation of the mean. Similarly, there is a 95\% chance of a result within two standard deviations of the mean, and a 99.7\% chance of a result within three standard deviations of the mean. This is called the 68\%--95\%--99.7\% rule.
+
+
+\subsection{Joint and conditional PDFs}
+Again, replacing the sum with an integral:
+
+\begin{definition}
+Given two continuous random variables $X$ and $Y$, their joint $\pdf$ $f_{X,Y}(x,y)$ is the unique function satisfying
+$$
+\mathbb{P}((X,Y) \in B) = \iint_B f_{X,Y}(x,y) dx dy.
+$$
+for any $B\subseteq \mathbb{R}^2$,
+\end{definition}
+
+\begin{example}
+The uniform random variables on $S\subset \mathbb{R}^2$ has joint PDF:
+$$
+f_{X,Y}(x,y)
+= 
+\begin{cases}
+\frac{1}{\text{ area of } S}, & (x,y) \in S,\\
+0,& \text{ else}.
+\end{cases}
+$$
+\end{example}
+
+\begin{definition}
+The marginal $\pdf$s $f_X(x)$ and $f_Y(y)$ are given by 
+$$
+f_X(x) = \int_{-\infty}^{\infty} f_{X,Y}(x,y)dy, \quad f_Y(y) = \int_{-\infty}^{\infty} f_{X,Y}(x,y)dx.
+$$
+\end{definition}
+
+Here is an example. Let $(X,Y)$ be the coordinates of the uniform random variable on the unit circle. Then
+$$
+f_{X,Y}(x,y)
+= 
+\begin{cases}
+\frac{1}{\pi}, \text{ if } x^2 + y^2 \leq 1,\\
+0, \text{ else. }
+\end{cases}
+$$
+Then for each fixed $y$, we have that $(x,y)$ is in the unit circle for $-\sqrt{1-y^2} < x< \sqrt{1-y^2}$. So
+$$
+f_Y(y) = \int_{-\sqrt{1-y^2}}^{\sqrt{1-y^2}} \frac{dx}{\pi} = \frac{2\sqrt{1-y^2}}{\pi} \text{ for } -1\leq y \leq 1.
+$$
+Similarly, $f_X(x) = 2\sqrt{1-x^2}/\pi$. Note that neither of these are uniform (they're more likely in the middle).
+
+\begin{definition}
+Given an event $E\subseteq \Omega$ and a continuous random variable $X$, the conditional $\pdf$ $f_{X\vert E}(x)$ is the function uniquely defined by 
+$$
+\PP(X \in B \vert E) = \int_B f_{X \vert E}(x)dx
+$$
+for all $B\subseteq \mathbb{R}$.
+\end{definition}
+Again by the fundamental theorem of calculus,
+$$
+f_{X\vert E}(x) \cdot \delta \approx \mathbb{P}(x \leq X \leq x + \delta \vert E).
+$$
+\begin{theorem} (Total probability theorem)
+If $E_1,\ldots,E_n$ are a partition of $\Omega$, then
+$$
+f_X(x) = \sum_{i=1}^n \PP(E_i) \cdot f_{X \vert E_i}(x).
+$$
+\end{theorem}
+
+Here is an example of the total probability theorem. Suppose that a shuttle arrives every 10 minutes, starting at 7am. You arrive at the shuttle stop at a random time (uniformly) between 7:25-7:40. What is the $\pdf$ for the amount of time you wait?
+
+Let $X$ be the random variable of the amount of time you wait. Let $E_1$ be the event that you arrive in between 7:25--7:30 and $E_2$ be the event that you arrive in between 7:30--7:40. If $E_1$ occurs, then you will wait a random time uniformly between $0$ and $5$ minutes. So
+$$
+f_{X \vert E_1}(x) 
+= 
+\begin{cases}
+\frac{1}{5}, & 0 \leq x \leq 5,\\
+0, & \text{ else}.
+\end{cases}
+$$
+Similarly, if $E_2$ occurs, then you will wait a random time uniformly between $0$ and $10$ minutes. So
+$$
+f_{X \vert E_2}(x)
+= 
+\begin{cases}
+\frac{1}{10}, & 0 \leq x \leq 10\\
+0, & \text{else}.
+\end{cases}
+$$
+Since $\PP(E_1)=5/15=1/3$ and $\PP(E_2) = 10/15=2/3$, we calculate that
+$$
+f_X(x) = \frac{1}{3} \cdot \frac{1}{5} + \frac{2}{3} \cdot \frac{1}{10} = \frac{2}{15} \text{ for } 0 \leq x \leq 5,
+$$
+and
+$$
+f_X(x) = \frac{1}{3} \cdot 0 + \frac{2}{3} \cdot \frac{1}{10} = \frac{1}{15} \text{ for } 5 < x \leq 10,
+$$
+
+Similarly to conditional PMFs, we can also define conditional PDFs:
+\begin{definition}
+Given two continuous random variables $X$ and $Y$, the conditional $\pdf$ of $X$ given $Y$ is the function
+$$
+f_{X \vert Y}(x \vert y) = \frac{f_{X,Y}(x,y)}{f_Y(y)}
+$$
+as long as $f_Y(y)>0$.
+\end{definition}
+
+Returning to the example when $(X,Y)$ are the coordinates of a uniform random variable on the unit circle, we have
+\begin{align*}
+f_{X \vert Y}(x \vert y) &= \frac{f_{X,Y}(x,y)}{f_Y(y)} \\
+&= \frac{1/\pi}{\tfrac{2}{\pi}\sqrt{1-y^2}}\\
+&= \frac{1}{2 \sqrt{1-y^2}} \text{ for } x^2 + y^2 \leq 1.
+\end{align*}
+So the conditional PMF is uniform, since $f_{X \vert Y}(x \vert y)$ does not depend on $x$.
+
+We note a couple of additional properties relating joint, conditional and marginal $\pdf$s:
+\begin{theorem} 
+For random variables $X$ and $Y$,
+$$
+f_{X}(x)=\int_{-\infty}^{\infty} f_{Y}(y) f_{X | Y}(x | y) d y
+$$
+and
+$$
+\mathbb{P}(X \in B | Y=y)=\int_{B} f_{X | Y}(x | y) d x.
+$$
+\end{theorem}
+
+Conditional PMFs give formulas for conditional expectations; the same holds for PDFs:
+\begin{definition}
+The conditional expectation of a continuous random variable $X$ given an event $E$ is
+$$
+\mathbb{E}[X \vert E] = \int_{-\infty}^{\infty} x \cdot f_{X \vert E}(x)dx.
+$$
+In the special case that the event $E$ is of the form $ \{Y=y\}$, we have
+$$
+\mathbb{E}[X \vert Y=y] = \int_{-\infty}^{\infty} x \cdot f_{X \vert Y}(x \vert y)dx.
+$$
+\end{definition}
+
+The conditional expectations give us a continuous version of the total expectation theorem.
+\begin{theorem}
+Let $E_1,\ldots,E_n$ be a partition of the sample space $\Omega$, and $X$ a random variable. Then
+$$
+\mathbb{E}[X]=\sum_{i=1}^{n} \mathbb{P}\left(E_{i}\right) \mathbb{E}\left[X | E_{i}\right]
+$$
+If the partition of $\Omega$ is into the events $\Omega = \bigcup_y \{Y=y\}$, then 
+$$
+\mathbb{E}[X]=\int_{-\infty}^{\infty} f_{Y}(y)  \mathbb{E}[X | Y=y] d y
+$$
+\end{theorem}
+
+For example, let's return to the shuttle problem, where we arrive at a random time between 7:25--7:40 for a shuttle that arrives either at 7:30 or 7:40. What is the expected amount of time that you need to wait? By the total expectation theorem,
+$$
+\EE[X] = \PP(E_1) \EE[X \vert E_1] + \PP(E_2)\EE[X \vert E_2]
+$$
+where $E_1$ is the event that you arrive in 7:25--7:30 and $E_2$ is the event that you arrive in 7:30--7:40. Conditional on $E_1$, the random variable $X$ is uniform on $[0,5]$, so its expectation is the midpoint $5/2$. Conditional on $E_2$, the random variable $X$ is uniform on $[0,10]$, so its expectation is the midpoint $5$. Therefore
+\begin{align*}
+\EE[X] &= \frac{1}{3} \cdot \frac{5}{2} + \frac{2}{3} \cdot 5 \\
+&= \frac{5}{6} + \frac{10}{3} = \frac{25}{6} = 4.1666\ldots
+\end{align*}
+Another way to do this problem is with the $\pdf$. We saw before that
+$$
+f_X(x)
+= 
+\begin{cases}
+2/15, & \text{ for } 0 \leq x \leq 5,\\
+1/15, & \text{ for } 5 \leq x \leq 10.
+\end{cases}
+$$
+So
+\begin{align*}
+\EE[X] &= \int_0^{10} x f_X(x) \\
+&= \int_0^5 \frac{2}{15}x dx + \int_5^{10} \frac{1}{15} xdx \\
+&= \frac{x^2}{15} \Big|_0^5 + \frac{x^2}{30} \Big|_5^{10}\\
+&= \frac{25-0}{15} + \frac{100-25}{30} \\
+&= \frac{25}{6} = 4.1666\ldots
+\end{align*}
+
+\subsection{Independence}
+The definition of independence for discrete random variables carries over to continuous random variables:
+\begin{definition}
+Two continuous random variables $X$ and $Y$ are independent if
+$$
+f_{X,Y}(x,y) = f_X(x) f_Y(y).
+$$
+\end{definition}
+Again, as before,
+\begin{theorem}
+If $X$ and $Y$ are independent random variables, then
+$$
+\mathbb{E}[XY] = \mathbb{E}[X] \mathbb{E}[Y].
+$$
+More generally, for any functions $g(x)$ and $h(y)$, 
+$$
+\EE[g(X)h(Y)] = \mathbb{E}[g(X)] \mathbb{E}[h(Y)].
+$$
+\end{theorem}
+
+\begin{theorem}
+If $X$ and $Y$ are independent, then
+$$
+\mathrm{Var}(X+Y) = \mathrm{Var}(X) + \mathrm{Var}(Y).
+$$
+\end{theorem}
+
+We note one example, which we will revisit later. Suppose $X \sim \mathcal{N}(\mu_X,\sigma_X^2)$ and $Y \sim \mathcal{N}(\mu_Y, \sigma_Y^2)$ are normal random variables. Then $\mathbb{E}[X+Y] = \mu_X + \mu_Y$. If additionally $X$ and $Y$ are independent, then $\mathrm{Var}(X+Y) = \sigma_X^2 + \sigma_Y^2$. Their joint PDF is 
+$$
+f_{X,Y}(x,y) = \frac{1}{2 \pi \sigma_X \sigma_Y} e^{-(x-\mu_X)^2/(2\sigma_X^2) - (y - \mu_Y)^2/(2\sigma_Y^2)}.
+$$
+The level curves are given by ellipses in $\mathbb{R}^2$.
+
+
+\newpage
+
+\end{document}
