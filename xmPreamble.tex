@@ -1,11 +1,7 @@
 \typeout{Start loading xmPreamble.tex}%
 
-% Add here extra macro's that are loaded automatically by all documents of class 'ximera' or 'xourse' in this repo
+% Extra macros loaded automatically by all documents of class 'ximera' or 'xourse'
 
-%%
-%%  Example:
-%%
-% \newcommand{\R}{\mathbb{R}
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\EE}{\mathbb{E}}
 \newcommand{\Var}{\mathrm{Var}}
@@ -13,38 +9,25 @@
 \newcommand{\cond}[2]{\frac{\PP( #1 \cap #2)}{\PP(#2)}}
 \newcommand{\pdf}{\text{probability distribution function}}
 
-\newtheorem{theorem}{{\color{red} Theorem}}[section]
-\newtheorem{prop}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{{\color{red} Corollary}}
-\theoremstyle{remark}
-\newtheorem{example}{Example}
-\newtheorem{reemark}{Remark}
-\newtheorem{definition}[theorem]{{\color{red} Definition}}
+% Ximera already defines theorem-like environments:
+% theorem, lemma, corollary, example, definition, etc.
+% So do NOT redefine them here.
 
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta}
+
 \usepackage{multicol}
 \usepackage{enumitem}
 \usepackage{caption}
-\usepackage{amsmath,amssymb,amsfonts,amsthm}
-\usepackage{fullpage}
-\usepackage{graphics}
-\usepackage{hyperref}
-\usepackage[T1]{fontenc} 
-\usepackage{colortbl} 
-\usepackage{fouriernc}
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{mathtools}
-\usepackage{ marvosym }
-\usepackage{tikz}
-\usepackage{color}
+\usepackage{graphics}
+\usepackage[T1]{fontenc}
+\usepackage{colortbl}
+\usepackage{fouriernc}
 \usepackage{marvosym}
+\usepackage{color}
+
 \providecommand{\Lightning}{\ensuremath{\text{\sffamily\bfseries !}}}
 
 \def\arrvline{\hfil\kern\arraycolsep\vline\kern-\arraycolsep\hfilneg}
-
-
-
-
-
-
